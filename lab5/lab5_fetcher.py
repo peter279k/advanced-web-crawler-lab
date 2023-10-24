@@ -25,7 +25,7 @@ for brand_info in brand_infos:
     query_text = urlencode(query={'q': brand_info['query_text']})
     brand_name = brand_info['brand_name']
     req_url = f'https://www.google.com/search?{query_text}'
-    service = ChromeService(ChromeDriverManager(driver_version='114.0.5735.90').install())
+    service = ChromeService(ChromeDriverManager().install())
 
     opt = webdriver.ChromeOptions()
     opt.add_argument('--no-sandbox')
