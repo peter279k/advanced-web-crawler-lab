@@ -10,14 +10,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 
 
-vendor_csv = './vendor.csv'
-if os.path.isfile(vendor_csv) is False:
-    print('The %s file is not found.' % vendor_csv)
-    exit(1)
-
-with open(vendor_csv, 'r') as f:
-    vendor_contents = f.readlines()
-
 vendors = []
 shopee_id = 'achunwanna'
 brand_name = '阿中丸子'
