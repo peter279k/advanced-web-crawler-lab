@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+selenium = "4.10.0"
+selenium-wire = "*"
+beautifulsoup4 = "*"
+webdriver-manager = "4.0.0"
+undetected-chromedriver = "*"
+
+[dev-packages]
+pytest = "*"
