@@ -2,12 +2,10 @@ import json
 import requests
 
 
-requests_session = requests.Session()
-requests_session.get('https://ezpost.post.gov.tw/Index.html?r=540335')
-
-
 headers = {
     'Content-Type': 'application/json; charset=UTF-8',
+    'CSRFToken': 'arbitrary_token',
+    'Cookie': 'CSRFToken=arbitrary_token; ASP.NET_SessionId=arbitrary_session',
 }
 
 payload = {
@@ -38,7 +36,7 @@ payload = {
     'UnDeliverOptNo': 2,
 }
 
-response = requests_session.post(
+response = requests.post(
     'https://ezpost.post.gov.tw/WCFService.svc/InsertNewMailInfoNolLogin',
     headers=headers,
     data=json.dumps(payload)

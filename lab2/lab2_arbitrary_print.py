@@ -2,12 +2,10 @@ import json
 import requests
 
 
-requests_session = requests.Session()
-requests_session.get('https://ezpost.post.gov.tw/Index.html?r=540335')
-
-
 headers = {
     'Content-Type': 'application/json; charset=UTF-8',
+    'CSRFToken': 'arbitrary_token',
+    'Cookie': 'CSRFToken=arbitrary_token; ASP.NET_SessionId=arbitrary_session',
 }
 
 payload = {
@@ -38,10 +36,39 @@ payload = {
     'UnDeliverOptNo': 2,
 }
 
-response = requests_session.post(
+response = requests.post(
     'https://ezpost.post.gov.tw/WCFService.svc/InsertNewMailInfoNolLogin',
     headers=headers,
     data=json.dumps(payload)
 )
 
-print(response.text)
+resp_json = response.json()
+try:
+    mail_no = json.loads(resp_json['d'])['Message']
+except:
+    print('Cannot fetch the MailNo. Stopped.')
+    exit(1)
+
+
+headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'CSRFToken': 'arbitrary_token',
+    'Cookie': 'CSRFToken=arbitrary_token; ASP.NET_SessionId=arbitrary_session',
+}
+
+payload = {
+    'MailNo': mail_no,
+}
+
+response = requests.post(
+    'https://ezpost.post.gov.tw/PrintPdf.aspx',
+    data=json.dumps(payload),
+    headers=headers,
+    allow_redirects=True
+)
+output_pdf_file = '%s.pdf' % payload['MailNo']
+with open(output_pdf_file, 'wb') as f:
+    f.write(response.content)
+
+
+print('The %s file is saved!' % output_pdf_file)
