@@ -57,17 +57,6 @@ for vendor in vendors:
 
     date_format = '%Y-%m-%d'
     brand_name = vendor['brand_name']
-    keyword_path = contents[0][0:-1]
-
-    handler = open(keyword_path, 'r')
-    keywords = handler.readlines()
-    handler.close()
-
-    index = 0
-    for keyword in keywords:
-        keywords[index] = keyword[0:-1]
-        index += 1
-
 
     host_link = 'https://shopee.tw'
     search_table_class_name = 'shop-search-result-view'
@@ -82,14 +71,6 @@ for vendor in vendors:
         for product_info in product_infos:
             product_link = host_link + product_info['href']
             product_name = product_info.select_one('div[data-sqe="%s"] > div > div' % product_name_class_name).text
-            find_keyword = False
-            for keyword in keywords:
-                if keyword in product_name:
-                    find_keyword = True
-                    break
-
-            if find_keyword is False:
-                continue
 
             price = int(product_info.select('span')[-1].text.replace(',', ''))
             csv_rec_format = ('%s,' * 9)[0:-1]
