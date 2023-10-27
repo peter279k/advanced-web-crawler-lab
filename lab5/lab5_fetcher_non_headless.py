@@ -20,7 +20,7 @@ brand_name = '阿中丸子'
 brand_infos.append({'query_text': query_text, 'brand_name': brand_name})
 
 
-csv_str = '廠商名稱,評論內容,評論內容hash,貼文來源,出現的關鍵字\n'
+csv_str = '廠商名稱,評論內容,評論內容hash,貼文來源\n'
 for brand_info in brand_infos:
     query_text = urlencode(query={'q': brand_info['query_text']})
     brand_name = brand_info['brand_name']
@@ -29,7 +29,6 @@ for brand_info in brand_infos:
 
     opt = webdriver.ChromeOptions()
     opt.add_argument('--no-sandbox')
-    opt.add_argument('--headless')
     opt.add_argument('user-agent=%s' % 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36')
     opt.add_argument('--start-maximized')
     opt.add_argument('--disable-notifications')
@@ -79,42 +78,18 @@ for brand_info in brand_infos:
     print('Parsing page source contents is started. (%s)' % brand_name)
 
     date_format = '%Y-%m-%d'
-    keyword_path = contents[0][0:-1]
-
-    handler = open(keyword_path, 'r')
-    keywords = handler.readlines()
-    handler.close()
-
-    index = 0
-    for keyword in keywords:
-        keywords[index] = keyword[0:-1]
-        index += 1
-
 
     soup = BeautifulSoup(page_source, html_parser)
     review_messages = soup.select('span[tabindex="-1"]')
     index = 0
 
     for review_message in review_messages:
-        find_keyword = False
-        the_keyword = ''
-        for keyword in keywords:
-            if keyword in review_message.text:
-                find_keyword = True
-                the_keyword = keyword
-                break
-
-        if find_keyword is False or index % 2 == 0:
-            index += 1
-            continue
-
-        csv_rec_format = ('%s,' * 5)[0:-1]
+        csv_rec_format = ('%s,' * 4)[0:-1]
         record_str = csv_rec_format % (
             brand_name,
             '"' + review_message.text + '"',
             hashlib.sha1(review_message.text.encode('utf-8')).hexdigest(),
             'Google評論',
-            the_keyword,
         )
         csv_str += record_str + '\n'
 
