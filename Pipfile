@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 selenium = "4.10.0"
+DrissionPage = "*"
 selenium-wire = "*"
 beautifulsoup4 = "*"
 webdriver-manager = "4.0.1"
