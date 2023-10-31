@@ -1,4 +1,5 @@
 *.pdf
+*.png
 .env
 */data/*
 Pipfile.lock
