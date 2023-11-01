@@ -10,11 +10,14 @@ import stealth from 'puppeteer-extra-plugin-stealth';
 chromium.use(stealth());
 
 // That's it. The rest is Playwright usage as normal 😊
-chromium.launch({ headless: false }).then(async (browser) => {
+chromium.launch({ headless: true }).then(async (browser) => {
   const page = await browser.newPage();
 
   console.log('Testing the stealth plugin..');
-  await page.goto('https://dcard.tw', { waitUntil: 'networkidle' });
+  try {
+    await page.goto('https://dcard.tw', { waitUntil: 'networkidle'  });
+  } catch(Error) {
+  }
 
   console.log('All done, check the page content. ✨');
   console.log(await page.content());
